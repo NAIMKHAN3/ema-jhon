@@ -20,7 +20,8 @@ function App() {
           path: '/shop', element: <Shop></Shop>
         },
         {
-          path: '/order-review', element: <OrderRivew></OrderRivew>
+          path: '/order-review', loader: () => fetch('products.json'),
+          element: <OrderRivew></OrderRivew>
         },
         {
           path: '/manage-inventory', element: <ManageInventory></ManageInventory>
