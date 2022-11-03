@@ -1,36 +1,40 @@
+import { signInAnonymously } from 'firebase/auth';
 import React from 'react';
 import { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AuthContex } from '../utilites/UserContext';
-import './Login.css'
 
-const LogIn = () => {
-    const { logIn, signInGoogle } = useContext(AuthContex)
-    const navigate = useNavigate();
+const SignUp = () => {
+    const { signIn } = useContext(AuthContex)
+    const [error, setError] = useState('')
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-
-        logIn(email, password)
+        const confirm = form.confirm.value;
+        if (confirm !== password) {
+            setError('Check Your Confirm Password')
+            return;
+        }
+        signIn(email, password)
             .then(result => {
                 const user = result.user;
-
                 console.log(user)
             })
             .catch(error => console.error(error))
         form.reset();
-        navigate("/home")
-        console.log(email, password,)
+        console.log(email, password, confirm)
     }
-
 
     return (
         <div className='form-container'>
             <form onSubmit={handleSubmit}>
-                <p>Log In</p>
+                <p>Sign Up</p>
+                <small className='error'>{error}</small>
                 <div>
                     <label className='label' htmlFor="email">Email</label>
                     <input className='' type="email" name='email' />
@@ -40,18 +44,17 @@ const LogIn = () => {
                     <input type="password" name='password' />
                 </div>
                 <div>
-                    <button className='btn-login'>Login</button>
-
+                    <label className='label' htmlFor="confirm">Confirm Password</label>
+                    <input type="password" name='confirm' />
                 </div>
-                <h4>New to Ema-jhon <Link to='/sign-up'>Create New Account</Link></h4>
-                <hr />
                 <div>
-                    <button onClick={signInGoogle} className='google'>Continue With Google</button>
+                    <button className='btn-login'>Sign up</button>
 
                 </div>
+                <h4>Already Have an Account?  <Link to='/log-in'>Please Login</Link></h4>
             </form>
         </div>
     );
 };
 
-export default LogIn;
+export default SignUp;

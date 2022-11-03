@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 import Order from '../Order/Order';
 import { getStordCard, removeFromDb } from '../utilites/fakeDb';
 import Review from './Review/Review';
@@ -30,6 +30,14 @@ const OrderRivew = () => {
         removeFromDb(id);
 
     }
+    const clearCart = () => {
+        setCart([])
+        deleteStorage();
+    }
+
+    const deleteStorage = () => {
+        localStorage.removeItem('shoping-cart')
+    }
 
 
 
@@ -41,10 +49,13 @@ const OrderRivew = () => {
                 {
                     cart.map(cart => <Review key={cart.id} cart={cart} handleDelete={handleDelete}></Review>)
                 }
+                {
+                    cart.length === 0 && <h2>No items for Review, please shop now. <Link to="/shop">Shop Now</Link></h2>
+                }
             </div>
             <div className='order-container'>
 
-                < Order cart={cart} ></Order>
+                < Order clearCart={clearCart} cart={cart} ></Order>
 
             </div>
         </div >

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Card from '../Card/Card';
 import Order from '../Order/Order';
 import { addToDb, getStordCard } from '../utilites/fakeDb';
@@ -93,6 +94,14 @@ const Shop = () => {
 
         setCart(newCart);
     }
+    const clearCart = () => {
+        console.log('clickd')
+        setCart([])
+        deleteStorage();
+    }
+    const deleteStorage = () => {
+        localStorage.removeItem('shoping-cart')
+    }
 
 
 
@@ -104,7 +113,9 @@ const Shop = () => {
                 }
             </div>
             <div className='order-container'>
-                <Order cart={cart}></Order>
+                <Order clearCart={clearCart} cart={cart}>
+                    <Link to='/order-review'><button>Review order</button></Link>
+                </Order>
             </div>
         </div>
     );

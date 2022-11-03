@@ -1,7 +1,7 @@
 import React from 'react';
 import './Order.css';
 
-const Order = ({ cart }) => {
+const Order = ({ cart, clearCart, children }) => {
 
     let price = 0;
     let sipping = 0;
@@ -27,6 +27,8 @@ const Order = ({ cart }) => {
             <p>Total Shipping:${sipping}</p>
             <p>Tax: ${tax}</p>
             <h4>Grand Total: ${total}</h4>
+            <button onClick={clearCart}>clear cart</button>
+            {children}
         </div>
     );
 };
