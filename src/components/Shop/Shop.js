@@ -1,14 +1,16 @@
 import React from 'react';
+import { useContext } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../Card/Card';
 import Order from '../Order/Order';
 import { addToDb, getStordCard } from '../utilites/fakeDb';
-import './Shop.css'
+import './Shop.css';
+import { AuthContex } from '../utilites/UserContext';
 
 const Shop = () => {
-
+    const { user } = useContext(AuthContex)
     const [cart, setCart] = useState([])
     const [storage, setStorage] = useState([]);
     const [shops, setShops] = useState([]);
@@ -17,11 +19,19 @@ const Shop = () => {
     const [size, setSize] = useState(10)
     const pages = Math.ceil(count / size)
     const array = [...Array(pages).keys()]
+    // console.log(page)
+
 
 
     useEffect(() => {
         const url = `http://localhost:5000/products?page=${page}&size=${size}`
-        fetch(url)
+        fetch(url,
+            {
+                method: 'POST',
+                headers: {
+                    authorization: `Berear ${localStorage.getItem('token')}`
+                }
+            })
             .then(res => res.json())
             .then(data => {
                 setCount(data.count)

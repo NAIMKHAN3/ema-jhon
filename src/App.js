@@ -26,7 +26,11 @@ function App() {
           path: '/shop', element: <PrivateRoute><Shop></Shop></PrivateRoute>
         },
         {
-          path: '/order-review', loader: () => fetch('http://localhost:5000/products'),
+          path: '/order-review', loader: () => fetch('http://localhost:5000/products', {
+            method: 'POST', headers: {
+              authorization: `Berear ${localStorage.getItem('token')}`
+            }
+          }),
           element: <PrivateRoute><OrderRivew></OrderRivew></PrivateRoute>
         },
         {

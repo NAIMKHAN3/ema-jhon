@@ -6,9 +6,7 @@ import { getStordCard, removeFromDb } from '../utilites/fakeDb';
 import Review from './Review/Review';
 
 const OrderRivew = () => {
-    const { products, count } = useLoaderData()
-
-    // console.log(products)
+    const { products } = useLoaderData();
 
     const stordCard = getStordCard();
     const savedCart = [];
