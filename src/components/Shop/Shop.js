@@ -8,20 +8,46 @@ import { addToDb, getStordCard } from '../utilites/fakeDb';
 import './Shop.css'
 
 const Shop = () => {
+
     const [cart, setCart] = useState([])
+    const [storage, setStorage] = useState([]);
     const [shops, setShops] = useState([]);
+    const [count, setCount] = useState(0)
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(10)
+    const pages = Math.ceil(count / size)
+    const array = [...Array(pages).keys()]
+
+
     useEffect(() => {
-        fetch('products.json')
+        const url = `http://localhost:5000/products?page=${page}&size=${size}`
+        fetch(url)
             .then(res => res.json())
-            .then(data => setShops(data))
-    }, []);
+            .then(data => {
+                setCount(data.count)
+                setShops(data.products)
+            })
+    }, [page, size]);
 
     useEffect(() => {
         const stordCard = getStordCard();
+
+        const ids = Object.keys(stordCard);
+        fetch('http://localhost:5000/productsById', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(ids)
+        })
+            .then(res => res.json())
+            .then(data => setStorage(data))
+            .catch(e => console.log(e))
+
         const savedCard = [];
         for (const id in stordCard) {
 
-            const addedProduct = shops.find(shop => shop.id === id);
+            const addedProduct = storage.find(shop => shop._id === id);
             const quantity = stordCard[id];
             if (addedProduct) {
                 addedProduct.quantity = quantity;
@@ -31,7 +57,7 @@ const Shop = () => {
         }
         setCart(savedCard);
 
-    }, [shops])
+    }, [storage])
 
     // useEffect(() => {
     //     const stordCard = getStordCard()
@@ -78,15 +104,15 @@ const Shop = () => {
 
 
     const handleAddToCart = (selectedShop) => {
-        addToDb(selectedShop.id)
-        const exist = cart.find(product => product.id === selectedShop.id);
+        addToDb(selectedShop._id)
+        const exist = cart.find(product => product._id === selectedShop._id);
         let newCart = [];
         if (!exist) {
             selectedShop.quantity = 1;
             newCart = [...cart, selectedShop]
         }
         else {
-            const rest = cart.filter(product => product.id !== selectedShop.id)
+            const rest = cart.filter(product => product._id !== selectedShop._id)
             exist.quantity = exist.quantity + 1;
             newCart = [...rest, exist]
         }
@@ -109,13 +135,29 @@ const Shop = () => {
         <div className='shop'>
             <div className="card-container">
                 {
-                    shops.map(shop => <Card key={shop.id} shop={shop} handleAddToCart={handleAddToCart}></Card>)
+                    shops.map(shop => <Card key={shop._id} shop={shop} handleAddToCart={handleAddToCart}></Card>)
                 }
             </div>
             <div className='order-container'>
                 <Order clearCart={clearCart} cart={cart}>
                     <Link to='/order-review'><button>Review order</button></Link>
                 </Order>
+            </div>
+            <div className="pagination">
+                <p>curent page : {page}</p>
+                {
+                    array.map(number => <button
+                        key={number}
+                        className={page === number ? 'current' : ''}
+                        onClick={() => setPage(number)}>{number}
+                    </button>)
+                }
+                <select onChange={e => setSize(e.target.value)}>
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
             </div>
         </div>
     );

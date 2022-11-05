@@ -1,4 +1,4 @@
-const addToDb = id => {
+const addToDb = _id => {
     let shopingCart = {};
     let stordCard = localStorage.getItem('shoping-cart');
     if (stordCard) {
@@ -7,12 +7,12 @@ const addToDb = id => {
     else {
         shopingCart = {};
     }
-    let quantity = shopingCart[id];
+    let quantity = shopingCart[_id];
     if (quantity) {
-        shopingCart[id] = quantity + 1;
+        shopingCart[_id] = quantity + 1;
     }
     else {
-        shopingCart[id] = 1;
+        shopingCart[_id] = 1;
     }
     localStorage.setItem('shoping-cart', JSON.stringify(shopingCart));
 }

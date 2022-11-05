@@ -26,7 +26,7 @@ function App() {
           path: '/shop', element: <PrivateRoute><Shop></Shop></PrivateRoute>
         },
         {
-          path: '/order-review', loader: () => fetch('products.json'),
+          path: '/order-review', loader: () => fetch('http://localhost:5000/products'),
           element: <PrivateRoute><OrderRivew></OrderRivew></PrivateRoute>
         },
         {

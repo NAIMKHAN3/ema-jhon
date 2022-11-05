@@ -14,3 +14,29 @@
     background-color: rgb(255, 232, 180);
     padding: 20px 15px;
 }
+
+.pagination {
+    margin-bottom: 100px;
+    margin-left: 300px;
+}
+
+.pagination button {
+    margin-right: 10px;
+    padding: 10px;
+    cursor: pointer;
+
+}
+
+.pagination button:hover {
+    background-color: orange;
+    border: none;
+    padding: 15px;
+}
+
+.pagination .current {
+    background-color: orange;
+    /* color: white; */
+    padding: 15px;
+    font-weight: bold;
+    border: none;
+}
